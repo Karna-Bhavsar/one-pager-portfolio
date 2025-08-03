@@ -201,6 +201,20 @@ const CreateDashboardPage = () => {
               <div className="flex items-center">
                 <input
                   type="checkbox"
+                  id="include_sample_data"
+                  name="include_sample_data"
+                  checked={formData.include_sample_data}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label htmlFor="include_sample_data" className="ml-2 block text-sm text-gray-700">
+                  Include sample widgets and data (recommended for getting started)
+                </label>
+              </div>
+
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
                   id="is_public"
                   name="is_public"
                   checked={formData.is_public}
