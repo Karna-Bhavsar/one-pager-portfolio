@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import axios from 'axios';
 import { Save, BarChart3, Activity, Target, BookOpen } from 'lucide-react';
+import { getDashboardTemplate } from '../utils/sampleData';
 
 const CreateDashboardPage = () => {
   const [formData, setFormData] = useState({
