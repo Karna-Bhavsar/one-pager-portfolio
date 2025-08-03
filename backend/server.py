@@ -356,14 +356,14 @@ async def upload_csv_data(
 async def discover_public_dashboards(skip: int = 0, limit: int = 20):
     dashboards = await db.dashboards.find(
         {"is_public": True},
-        {"owner_password": 0}
+        {"_id": 0, "owner_password": 0}
     ).skip(skip).limit(limit).to_list(None)
     
     # Add owner info
     for dashboard in dashboards:
         owner = await db.users.find_one(
             {"user_id": dashboard["owner_id"]},
-            {"username": 1, "full_name": 1}
+            {"_id": 0, "username": 1, "full_name": 1}
         )
         dashboard["owner"] = owner
     
