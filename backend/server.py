@@ -212,7 +212,10 @@ async def get_user_dashboards(current_user = Depends(get_current_user)):
 
 @app.get("/api/dashboards/{dashboard_id}")
 async def get_dashboard(dashboard_id: str, current_user = Depends(get_current_user)):
-    dashboard = await db.dashboards.find_one({"dashboard_id": dashboard_id})
+    dashboard = await db.dashboards.find_one(
+        {"dashboard_id": dashboard_id},
+        {"_id": 0}
+    )
     
     if not dashboard:
         raise HTTPException(status_code=404, detail="Dashboard not found")
@@ -222,7 +225,10 @@ async def get_dashboard(dashboard_id: str, current_user = Depends(get_current_us
         raise HTTPException(status_code=403, detail="Access denied")
     
     # Get widgets for this dashboard
-    widgets = await db.widgets.find({"dashboard_id": dashboard_id}).to_list(None)
+    widgets = await db.widgets.find(
+        {"dashboard_id": dashboard_id},
+        {"_id": 0}
+    ).to_list(None)
     dashboard["widgets"] = widgets
     
     return dashboard
