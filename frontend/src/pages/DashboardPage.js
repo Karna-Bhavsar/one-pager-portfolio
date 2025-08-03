@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { Plus, Settings, Share2, BarChart3, Calendar, TrendingUp } from 'lucide-react';
+import DashboardGrid from '../components/DashboardGrid';
 
 const DashboardPage = () => {
   const [dashboards, setDashboards] = useState([]);
