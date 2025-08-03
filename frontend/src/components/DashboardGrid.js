@@ -5,6 +5,7 @@ import MetricWidget from './widgets/MetricWidget';
 import ChartWidget from './widgets/ChartWidget';
 import ProgressWidget from './widgets/ProgressWidget';
 import TableWidget from './widgets/TableWidget';
+import { generateSampleData } from '../utils/sampleData';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
 
