@@ -205,7 +205,7 @@ async def create_dashboard(dashboard_data: DashboardCreate, current_user = Depen
 async def get_user_dashboards(current_user = Depends(get_current_user)):
     dashboards = await db.dashboards.find(
         {"owner_id": current_user["user_id"]},
-        {"password_hash": 0}
+        {"_id": 0, "password_hash": 0}
     ).to_list(None)
     
     return {"dashboards": dashboards}
