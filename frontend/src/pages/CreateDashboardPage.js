@@ -64,11 +64,48 @@ const CreateDashboardPage = () => {
 
     try {
       const API_BASE_URL = process.env.REACT_APP_BACKEND_URL;
-      const response = await axios.post(`${API_BASE_URL}/api/dashboards`, formData);
       
-      if (response.data.dashboard_id) {
+      // Create the dashboard
+      const dashboardResponse = await axios.post(`${API_BASE_URL}/api/dashboards`, {
+        title: formData.title,
+        description: formData.description,
+        template_type: formData.template_type,
+        is_public: formData.is_public,
+        custom_domain: formData.custom_domain
+      });
+      
+      if (dashboardResponse.data.dashboard_id) {
+        const dashboardId = dashboardResponse.data.dashboard_id;
+        
+        // Add sample widgets if requested
+        if (formData.include_sample_data && formData.template_type !== 'custom') {
+          const sampleWidgets = getDashboardTemplate(formData.template_type);
+          
+          // Create each sample widget
+          for (const widget of sampleWidgets) {
+            try {
+              await axios.post(`${API_BASE_URL}/api/widgets`, {
+                dashboard_id: dashboardId,
+                widget_type: widget.widget_type,
+                title: widget.title,
+                position: {
+                  x: 0,
+                  y: 0,
+                  width: 4,
+                  height: 4
+                },
+                config: widget.config,
+                data_source: null
+              });
+            } catch (widgetError) {
+              console.error('Error creating widget:', widgetError);
+              // Continue with other widgets even if one fails
+            }
+          }
+        }
+        
         toast.success('Dashboard created successfully!');
-        navigate(`/dashboard/${response.data.dashboard_id}`);
+        navigate(`/dashboard/${dashboardId}`);
       }
     } catch (error) {
       toast.error(error.response?.data?.detail || 'Failed to create dashboard');
