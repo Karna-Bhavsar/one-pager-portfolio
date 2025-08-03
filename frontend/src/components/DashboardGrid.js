@@ -61,72 +61,81 @@ const DashboardGrid = ({ dashboardId, widgets = [], dashboardType = 'custom', on
       config: widget.config || {}
     };
 
-    // Sample data for demo purposes
-    const sampleData = {
-      metric: {
-        value: 1250,
-        previousValue: 1100,
-        unit: 'steps',
-        target: 2000
-      },
-      chart: {
-        data: [
-          { date: '2024-01-01', value: 120 },
-          { date: '2024-01-02', value: 135 },
-          { date: '2024-01-03', value: 125 },
-          { date: '2024-01-04', value: 145 },
-          { date: '2024-01-05', value: 160 },
-          { date: '2024-01-06', value: 155 },
-          { date: '2024-01-07', value: 170 }
-        ]
-      },
-      progress: {
-        current: 15,
-        target: 30,
-        unit: 'workouts'
-      },
-      table: {
-        data: [
-          { id: 1, date: '2024-01-18', activity: 'Morning Run', duration: '45 min', calories: 420 },
-          { id: 2, date: '2024-01-17', activity: 'Gym Session', duration: '60 min', calories: 380 },
-          { id: 3, date: '2024-01-16', activity: 'Cycling', duration: '30 min', calories: 290 }
-        ],
-        columns: [
-          { key: 'date', label: 'Date', sortable: true },
-          { key: 'activity', label: 'Activity', sortable: true },
-          { key: 'duration', label: 'Duration', sortable: false },
-          { key: 'calories', label: 'Calories', sortable: true }
-        ]
+    // Get appropriate sample data based on widget type and dashboard type
+    const getWidgetData = () => {
+      switch (widget.widget_type) {
+        case 'metric':
+          return sampleData.metrics?.[0] || {
+            value: Math.floor(Math.random() * 1000),
+            previousValue: Math.floor(Math.random() * 900),
+            unit: 'items',
+            target: Math.floor(Math.random() * 1200)
+          };
+        case 'chart':
+          return sampleData.charts?.[0] || {
+            data: [
+              { date: '2024-01-01', value: 120 },
+              { date: '2024-01-02', value: 135 },
+              { date: '2024-01-03', value: 125 },
+              { date: '2024-01-04', value: 145 },
+              { date: '2024-01-05', value: 160 },
+              { date: '2024-01-06', value: 155 },
+              { date: '2024-01-07', value: 170 }
+            ]
+          };
+        case 'progress':
+          return sampleData.progress?.[0] || sampleData.streaks?.[0] || {
+            current: Math.floor(Math.random() * 80),
+            target: 100,
+            unit: 'percent'
+          };
+        case 'table':
+          return {
+            data: sampleData.activities || sampleData.subjects || [
+              { id: 1, date: '2024-01-18', activity: 'Sample Activity', value: 42 },
+              { id: 2, date: '2024-01-17', activity: 'Another Activity', value: 38 },
+              { id: 3, date: '2024-01-16', activity: 'Third Activity', value: 29 }
+            ],
+            columns: [
+              { key: 'date', label: 'Date', sortable: true },
+              { key: 'activity', label: 'Activity', sortable: true },
+              { key: 'value', label: 'Value', sortable: true }
+            ]
+          };
+        default:
+          return {};
       }
     };
+
+    const widgetData = getWidgetData();
 
     switch (widget.widget_type) {
       case 'metric':
         return (
           <MetricWidget
             {...baseProps}
-            {...sampleData.metric}
+            {...widgetData}
           />
         );
       case 'chart':
         return (
           <ChartWidget
             {...baseProps}
-            {...sampleData.chart}
+            {...widgetData}
           />
         );
       case 'progress':
         return (
           <ProgressWidget
             {...baseProps}
-            {...sampleData.progress}
+            {...widgetData}
           />
         );
       case 'table':
         return (
           <TableWidget
             {...baseProps}
-            {...sampleData.table}
+            {...widgetData}
           />
         );
       default:
