@@ -283,17 +283,24 @@ async def add_data_point(data_point: DataPointCreate, current_user = Depends(get
 @app.get("/api/data/{widget_id}")
 async def get_widget_data(widget_id: str, current_user = Depends(get_current_user)):
     # Verify widget access
-    widget = await db.widgets.find_one({"widget_id": widget_id})
+    widget = await db.widgets.find_one(
+        {"widget_id": widget_id},
+        {"_id": 0}
+    )
     if not widget:
         raise HTTPException(status_code=404, detail="Widget not found")
     
     # Check access (owner or public dashboard)
-    dashboard = await db.dashboards.find_one({"dashboard_id": widget["dashboard_id"]})
+    dashboard = await db.dashboards.find_one(
+        {"dashboard_id": widget["dashboard_id"]},
+        {"_id": 0}
+    )
     if dashboard["owner_id"] != current_user["user_id"] and not dashboard.get("is_public", False):
         raise HTTPException(status_code=403, detail="Access denied")
     
     data_points = await db.data_points.find(
-        {"widget_id": widget_id}
+        {"widget_id": widget_id},
+        {"_id": 0}
     ).sort("timestamp", 1).to_list(None)
     
     return {"data": data_points}
