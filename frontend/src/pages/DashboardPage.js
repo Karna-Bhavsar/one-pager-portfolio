@@ -153,36 +153,38 @@ const DashboardPage = () => {
                   <Settings className="h-4 w-4" />
                   <span>Settings</span>
                 </button>
-                <button className="flex items-center space-x-2 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors">
-                  <Plus className="h-4 w-4" />
-                  <span>Add Widget</span>
-                </button>
+                {selectedDashboard.is_public && (
+                  <button className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                    <Share2 className="h-4 w-4" />
+                    <span>Share</span>
+                  </button>
+                )}
               </div>
             </div>
 
-            {selectedDashboard.widgets && selectedDashboard.widgets.length > 0 ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {selectedDashboard.widgets.map((widget) => (
-                  <div key={widget.widget_id} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">{widget.title}</h3>
-                    <div className="flex items-center justify-center h-32 bg-gray-50 rounded-lg">
-                      <TrendingUp className="h-8 w-8 text-gray-400" />
-                    </div>
-                    <p className="text-sm text-gray-600 mt-2">Widget content will be displayed here</p>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="text-center py-12">
-                <TrendingUp className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                <h3 className="text-xl font-medium text-gray-900 mb-2">No widgets yet</h3>
-                <p className="text-gray-600 mb-6">Add your first widget to start visualizing your data</p>
-                <button className="inline-flex items-center space-x-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors">
-                  <Plus className="h-5 w-5" />
-                  <span>Add Your First Widget</span>
-                </button>
-              </div>
-            )}
+            {/* Enhanced Dashboard Grid */}
+            <DashboardGrid 
+              dashboardId={selectedDashboard.dashboard_id}
+              widgets={selectedDashboard.widgets || []}
+              onLayoutChange={(layouts) => {
+                // Save layout changes to backend
+                console.log('Layout changed:', layouts);
+              }}
+              onWidgetUpdate={(updatedWidgets) => {
+                // Update widgets in state and backend
+                setSelectedDashboard(prev => ({
+                  ...prev,
+                  widgets: updatedWidgets
+                }));
+              }}
+              onWidgetDelete={(widgetId) => {
+                // Remove widget from state and backend
+                setSelectedDashboard(prev => ({
+                  ...prev,
+                  widgets: prev.widgets.filter(w => w.widget_id !== widgetId)
+                }));
+              }}
+            />
           </div>
         </div>
       ) : (
