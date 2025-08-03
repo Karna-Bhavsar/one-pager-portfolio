@@ -11,9 +11,12 @@ import 'react-resizable/css/styles.css';
 
 const ResponsiveGridLayout = WidthProvider(Responsive);
 
-const DashboardGrid = ({ dashboardId, widgets = [], onLayoutChange, onWidgetUpdate, onWidgetDelete }) => {
+const DashboardGrid = ({ dashboardId, widgets = [], dashboardType = 'custom', onLayoutChange, onWidgetUpdate, onWidgetDelete }) => {
   const [editMode, setEditMode] = useState(false);
   const [showAddWidget, setShowAddWidget] = useState(false);
+
+  // Generate sample data based on dashboard type
+  const sampleData = generateSampleData(dashboardType);
 
   // Default layout configuration
   const defaultLayouts = {
