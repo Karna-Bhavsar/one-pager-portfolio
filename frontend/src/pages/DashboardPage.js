@@ -165,6 +165,7 @@ const DashboardPage = () => {
             {/* Enhanced Dashboard Grid */}
             <DashboardGrid 
               dashboardId={selectedDashboard.dashboard_id}
+              dashboardType={selectedDashboard.template_type}
               widgets={selectedDashboard.widgets || []}
               onLayoutChange={(layouts) => {
                 // Save layout changes to backend
