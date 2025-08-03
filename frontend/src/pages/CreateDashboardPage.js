@@ -12,7 +12,8 @@ const CreateDashboardPage = () => {
     description: '',
     template_type: 'custom',
     is_public: false,
-    custom_domain: ''
+    custom_domain: '',
+    include_sample_data: true
   });
   const [loading, setLoading] = useState(false);
   const { user } = useAuth();
